@@ -142,8 +142,8 @@ CREATE TABLE if not exists Libro (
 	CodCategoria int not null,
 	CONSTRAINT PK_libro_Isbn
 	PRIMARY KEY(Isbn),
-	CONSTRAINT FK_Autor_CodAutor
-	FOREIGN KEY (CodAutor) references Autor(CodAutor),
+	CONSTRAINT FK_Autor_Autor
+	FOREIGN KEY (Autor) references Autor(CodAutor),
 	CONSTRAINT FK_Autor_CodCategoria
 	FOREIGN KEY (CodCategoria) references Categoria(CodCategoria)
 	);
