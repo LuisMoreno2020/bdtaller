@@ -5,7 +5,7 @@ CREATE DATABASE if not exists Biblioteca;
 USE Biblioteca;
 
 CREATE TABLE if not exists Cargo (
-	CodCargo int not null,
+	CodCargo int not null auto_increment,
 	NombreCargo varchar(25) not null,
 	CONSTRAINT PK_CARGO_CodCargo
 	PRIMARY KEY (CodCargo)
@@ -28,7 +28,7 @@ CREATE TABLE if not exists Usuario (
     FOREIGN KEY (Cargo) REFERENCES Cargo(CodCargo));
 
 CREATE TABLE if not exists TelefonoUsuario (
-	IdTelefono int not null,
+	IdTelefono int not null auto_increment,
 	Telefono int not null,
 	RutUsuario int not null,
 	CONSTRAINT PK_TelefonoUsuario_Idtelefono
@@ -52,14 +52,14 @@ CREATE TABLE if not exists Log (
     FOREIGN KEY(RutUsuario) REFERENCES Usuario(RutUsuario));
 
 CREATE TABLE if not exists Curso (
-	CodCurso int not null,
+	CodCurso int not null auto_increment,
 	Curso int(1) not null,
 	CONSTRAINT PK_Curso_CodCurso
 	PRIMARY KEY (CodCurso)
 	);
 
 CREATE TABLE if not exists Letra (
-	CodLetra int not null,
+	CodLetra int not null auto_increment,
 	Letra varchar(1) not null,
 	CONSTRAINT PK_Letra_CodLetra
 	PRIMARY KEY (CodLetra)
@@ -96,7 +96,7 @@ CREATE TABLE if not exists Alumno (
     
 
 CREATE TABLE if not exists TelefonoAlumno (
-	IdTelefono int not null,
+	IdTelefono int not null auto_increment,
 	Telefono int not null,
 	RutAlumno int not null,
 	CONSTRAINT PK_TelefonoAlumno_Idtelefono
@@ -106,7 +106,7 @@ CREATE TABLE if not exists TelefonoAlumno (
 	);
 
 CREATE TABLE if not exists Prestamo (
-	Nro int not null,
+	Nro int not null auto_increment,
 	RutUsuario int not null,
 	DvUsuario varchar(1) not null,
 	RutAlumno int not null,
@@ -121,27 +121,28 @@ CREATE TABLE if not exists Prestamo (
 	);
 
 CREATE TABLE if not exists Autor (
-	CodAutor int not null,
+	CodAutor int not null auto_increment,
 	NombreAutor varchar (30),
 	CONSTRAINT PK_autor_CodAutor
 	PRIMARY KEY (CodAutor)
 	);
 
 CREATE TABLE if not exists Categoria (
-	CodCategoria int not null,
+	CodCategoria int not null auto_increment,
 	NombreCategoria varchar(30),
 	CONSTRAINT PK_Categoria_CodCategoria
 	PRIMARY KEY (CodCategoria)
 	);
 
 CREATE TABLE if not exists Libro (
+	CodLibro int not null auto_increment,
 	Isbn varchar(13) not null,
 	Titulo varchar(100) not null,
 	NroPagina int not null,
 	Autor int not null,
 	CodCategoria int not null,
-	CONSTRAINT PK_libro_Isbn
-	PRIMARY KEY(Isbn),
+	CONSTRAINT PK_libro_CodLibro
+	PRIMARY KEY(CodLibro),
 	CONSTRAINT FK_Autor_Autor
 	FOREIGN KEY (Autor) references Autor(CodAutor),
 	CONSTRAINT FK_Autor_CodCategoria
@@ -149,19 +150,22 @@ CREATE TABLE if not exists Libro (
 	);
 
 CREATE TABLE if not exists Ubicacion (
-    CodUbicacion int not null,
+    CodUbicacion int not null auto_increment,
     NombreUbicacion varchar(25),
     CONSTRAINT PK_Ubicacion_CodUbicacion
     PRIMARY KEY (CodUbicacion)
     );
 
 CREATE TABLE if not exists Ejemplar (
-	CodEjemplar int not null,
+	CodEjemplar int not null auto_increment,
+	CodLibro int not null,
 	CodUbicacion int not null,
 	Estado int not null,
 	Activo int not null,
 	CONSTRAINT PK_ejemplar_CodEjemplar
 	PRIMARY KEY (CodEjemplar),
+	CONSTRAINT PK_Ejemplar_CodLibro
+	FOREIGN KEY(CodLibro) references Libro(CodLibro),
 	CONSTRAINT PK_Ejemplar_Ubicacion
 	FOREIGN KEY(CodUbicacion) references Ubicacion(CodUbicacion)
 	);
@@ -179,3 +183,4 @@ CREATE TABLE if not exists DetallePrestamo (
 	CONSTRAINT FK_DetallePrestamo_Codigo
 	FOREIGN KEY (Codigo) references Ejemplar(CodEjemplar)
 	);
+
