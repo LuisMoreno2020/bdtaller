@@ -21,38 +21,35 @@ CREATE TABLE if not exists Usuario (
 	Cargo int not null,
 	Activo int(1) not null, 
 	Contraseña varchar(15) not null,
+    
 	CONSTRAINT PK_Usuario_RutUsuario
-	PRIMARY KEY (RutUsuario)
-	CONSTRAINT FK_Usuario_Cargo
-	FOREIGN KEY (Cargo) reference Cargo(idCargo)
-	);
+	PRIMARY KEY (RutUsuario),
+    CONSTRAINT FK_Usuario_Cargo
+    FOREIGN KEY (Cargo) REFERENCES Cargo(CodCargo));
 
 CREATE TABLE if not exists TelefonoUsuario (
 	IdTelefono int not null,
 	Telefono int not null,
 	RutUsuario int not null,
 	CONSTRAINT PK_TelefonoUsuario_Idtelefono
-	PRIMARY KEY (IdTelefono)
+	PRIMARY KEY (IdTelefono),
 	CONSTRAINT FK_TelefonoUsuario_RutUsuario
-	FOREIGN KEY (RutUsuario) reference Usuario(RutUsuario)
-	);
+	FOREIGN KEY (RutUsuario) REFERENCES Usuario(RutUsuario));
 
 CREATE TABLE if not exists Usuario_Cargo (
 	RutUsuario int not null,
 	CodCargo int not null,
 	CONSTRAINT FK_Usuario_Cargo_RutUsuario
-	FOREIGN KEY (RutUsuario) reference Usuario(RutUsuario)
-	CONSTRAINT FK_Usuario_Cargo_CodCargo
-	FOREIGN KEY (CodCargo) reference Cargo(CodCargo)
-	);
+	FOREIGN KEY (RutUsuario) REFERENCES Usuario(RutUsuario),
+	CONSTRAINT FK_Usuario_CARgo_CodCargo
+    FOREIGN KEY (CodCargo) REFERENCES Cargo(CodCargo));
 
 CREATE TABLE if not exists Log (
 	RutUsuario int not null,
 	Movimiento varchar(30) not null,
-	Fecha date not null default,
+	Fecha date not null,
 	CONSTRAINT FK_Log_RutUsuario
-	FOREIGN KEY (RutUsuario) reference Usuario(RutUsuario)
-	);
+    FOREIGN KEY(RutUsuario) REFERENCES Usuario(RutUsuario));
 
 CREATE TABLE if not exists Curso (
 	CodCurso int not null,
@@ -88,23 +85,24 @@ CREATE TABLE if not exists Alumno (
 	CodLetra int not null,
 	CodNivel int not null,
 	CONSTRAINT PK_Alumno_RutAlumno
-	PRIMARY KEY (RutAlumno)
+	PRIMARY KEY (RutAlumno),
 	CONSTRAINT FK_Alumno_CodCurso
-	FOREIGN KEY (CodCurso) reference Curso(CodCurso)
+	FOREIGN KEY (CodCurso) REFERENCES Curso(CodCurso),
 	CONSTRAINT FK_Alumno_CodLetra
-	FOREIGN KEY (CodLetra) reference Letra(CodLetra)
+	FOREIGN KEY (CodLetra) REFERENCES Letra(CodLetra),
 	CONSTRAINT FK_Alumno_CodNivel
-	FOREIGN KEY (CodNivel) reference Nivel(CodNivel)
+	FOREIGN KEY (CodNivel) REFERENCES Nivel(CodNivel)
 	);
+    
 
 CREATE TABLE if not exists TelefonoAlumno (
 	IdTelefono int not null,
 	Telefono int not null,
 	RutAlumno int not null,
 	CONSTRAINT PK_TelefonoAlumno_Idtelefono
-	PRIMARY KEY (IdTelefono)
+	PRIMARY KEY (IdTelefono),
 	CONSTRAINT FK_TelefonoAlumno_RutAlumno
-	FOREIGN KEY (RutAlumno) reference Usuario(RutAlumno)
+	FOREIGN KEY (RutAlumno) REFERENCES Alumno(RutAlumno)
 	);
 
 CREATE TABLE if not exists Prestamo (
@@ -115,11 +113,11 @@ CREATE TABLE if not exists Prestamo (
 	DvAlumno varchar(1) not null,
 	Emision date not null,
 	CONSTRAINT PK_Prestamo_Nro
-	PRIMARY KEY (Nro)
+	PRIMARY KEY (Nro),
 	CONSTRAINT FK_Prestamo_RutUsuario
-	FOREIGN KEY (RutUsuario) reference Usuario(RutUsuario)
+	FOREIGN KEY (RutUsuario) references Usuario(RutUsuario),
 	CONSTRAINT FK_Prestamo_RutAlumno
-	FOREIGN KEY (RutAlumno) reference Alumno(RutAlumno)
+	FOREIGN KEY (RutAlumno) references Alumno(RutAlumno)
 	);
 
 CREATE TABLE if not exists Autor (
@@ -131,7 +129,7 @@ CREATE TABLE if not exists Autor (
 
 CREATE TABLE if not exists Categoria (
 	CodCategoria int not null,
-	NombreCategoria varchar(30)
+	NombreCategoria varchar(30),
 	CONSTRAINT PK_Categoria_CodCategoria
 	PRIMARY KEY (CodCategoria)
 	);
@@ -143,19 +141,19 @@ CREATE TABLE if not exists Libro (
 	Autor int not null,
 	CodCategoria int not null,
 	CONSTRAINT PK_libro_Isbn
-	PRIMARY KEY(Isbn)
+	PRIMARY KEY(Isbn),
 	CONSTRAINT FK_Autor_CodAutor
-	FOREIGN KEY (CodAutor) reference Autor(CodAutor)
+	FOREIGN KEY (CodAutor) references Autor(CodAutor),
 	CONSTRAINT FK_Autor_CodCategoria
-	FOREIGN KEY (CodCategoria) reference Categoria(CodCategoria)
+	FOREIGN KEY (CodCategoria) references Categoria(CodCategoria)
 	);
 
 CREATE TABLE if not exists Ubicacion (
-CodUbicacion int not null,
-NombreUbicacion varchar(25),
-CONSTRAINT PK_Ubicacion_CodUbicacion
-PRIMARY KEY (CodUbicacion)
-);
+    CodUbicacion int not null,
+    NombreUbicacion varchar(25),
+    CONSTRAINT PK_Ubicacion_CodUbicacion
+    PRIMARY KEY (CodUbicacion)
+    );
 
 CREATE TABLE if not exists Ejemplar (
 	CodEjemplar int not null,
@@ -163,9 +161,9 @@ CREATE TABLE if not exists Ejemplar (
 	Estado int not null,
 	Activo int not null,
 	CONSTRAINT PK_ejemplar_CodEjemplar
-	PRIMARY KEY (CodEjemplar)
+	PRIMARY KEY (CodEjemplar),
 	CONSTRAINT PK_Ejemplar_Ubicacion
-	FOREIGN KEY(CodUbicacion) reference Ubicacion(CodUbicacion)
+	FOREIGN KEY(CodUbicacion) references Ubicacion(CodUbicacion)
 	);
 
 
@@ -173,11 +171,11 @@ CREATE TABLE if not exists DetallePrestamo (
 	NroPrestamo int not null,
 	Codigo int(15) not null,
 	DiasPropuestos int not null,
-	FechaDevPropuesta date not null default,
+	FechaDevPropuesta date not null,
 	Comentario text null,
-	FechaDevolucionReal date not null default,	
+	FechaDevolucionReal date not null,	
 	CONSTRAINT FK_DetallePrestamo_NroPrestamo
-	FOREIGN KEY (NroPrestamo) reference Prestamo(Nro)
+	FOREIGN KEY (NroPrestamo) references Prestamo(Nro),
 	CONSTRAINT FK_DetallePrestamo_Codigo
-	FOREIGN KEY (Codigo) reference Ejemplar(CodEjemplar)
+	FOREIGN KEY (Codigo) references Ejemplar(CodEjemplar)
 	);
