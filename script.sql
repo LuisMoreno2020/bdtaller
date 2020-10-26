@@ -1,4 +1,4 @@
-/CREATE DATABASE if not exists Biblioteca;
+CREATE DATABASE if not exists Biblioteca;
 
 USE Biblioteca;
 
@@ -16,14 +16,11 @@ CREATE TABLE if not exists Usuario (
 	ApellidoPaterno varchar(25) not null,
 	ApellidoMaterno varchar(25) not null,
 	Email varchar(35) null,
-	Cargo int not null,
 	Activo int(1) not null, 
 	Contraseña varchar(15) not null,
-    
-	CONSTRAINT PK_Usuario_RutUsuario
-	PRIMARY KEY (RutUsuario),
-    CONSTRAINT FK_Usuario_Cargo
-    FOREIGN KEY (Cargo) REFERENCES Cargo(CodCargo));
+   	CONSTRAINT PK_Usuario_RutUsuario
+	PRIMARY KEY (RutUsuario));
+
 
 CREATE TABLE if not exists TelefonoUsuario (
 	IdTelefono int not null auto_increment,
