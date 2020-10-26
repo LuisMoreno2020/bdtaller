@@ -49,13 +49,6 @@ CREATE TABLE if not exists Log (
 	CONSTRAINT FK_Log_RutUsuario
     FOREIGN KEY(RutUsuario) REFERENCES Usuario(RutUsuario));
 
-CREATE TABLE if not exists Curso (
-	CodCurso int not null auto_increment,
-	Curso int(1) not null,
-	CONSTRAINT PK_Curso_CodCurso
-	PRIMARY KEY (CodCurso)
-	);
-
 CREATE TABLE if not exists Letra (
 	CodLetra int not null auto_increment,
 	Letra varchar(1) not null,
@@ -68,6 +61,13 @@ CREATE TABLE if not exists Nivel (
 	Nivel varchar(10) not null,
 	CONSTRAINT PK_Nivel_CodNivel
 	PRIMARY KEY (CodNivel)
+	);
+
+CREATE TABLE if not exists Curso (
+	CodCurso int not null auto_increment,
+	Curso int(1) not null,
+	CONSTRAINT PK_Curso_CodCurso
+	PRIMARY KEY (CodCurso)
 	);
 
 
