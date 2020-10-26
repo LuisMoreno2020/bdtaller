@@ -10,13 +10,13 @@ CREATE TABLE if not exists Cargo (
 	);
 
 CREATE TABLE if not exists Usuario (
-	RutUsuario int not null,
+	RutUsuario int(8) not null,
 	DvUsuario varchar(1) not null,
 	Nombres varchar(25) not null,
 	ApellidoPaterno varchar(25) not null,
 	ApellidoMaterno varchar(25) not null,
 	Email varchar(35) null,
-	Activo int(1) not null, 
+	Activo boolean not null, 
 	Contraseña varchar(15) not null,
    	CONSTRAINT PK_Usuario_RutUsuario
 	PRIMARY KEY (RutUsuario));
@@ -25,14 +25,14 @@ CREATE TABLE if not exists Usuario (
 CREATE TABLE if not exists TelefonoUsuario (
 	IdTelefono int not null auto_increment,
 	Telefono int not null,
-	RutUsuario int not null,
+	RutUsuario int(8) not null,
 	CONSTRAINT PK_TelefonoUsuario_Idtelefono
 	PRIMARY KEY (IdTelefono),
 	CONSTRAINT FK_TelefonoUsuario_RutUsuario
 	FOREIGN KEY (RutUsuario) REFERENCES Usuario(RutUsuario));
 
 CREATE TABLE if not exists Usuario_Cargo (
-	RutUsuario int not null,
+	RutUsuario int(8) not null,
 	CodCargo int not null,
 	CONSTRAINT FK_Usuario_Cargo_RutUsuario
 	FOREIGN KEY (RutUsuario) REFERENCES Usuario(RutUsuario),
@@ -40,7 +40,7 @@ CREATE TABLE if not exists Usuario_Cargo (
     FOREIGN KEY (CodCargo) REFERENCES Cargo(CodCargo));
 
 CREATE TABLE if not exists Log (
-	RutUsuario int not null,
+	RutUsuario int(8) not null,
 	Movimiento varchar(30) not null,
 	Fecha date not null,
 	CONSTRAINT FK_Log_RutUsuario
@@ -69,7 +69,7 @@ CREATE TABLE if not exists Curso (
 
 
 CREATE TABLE if not exists Alumno (
-	RutAlumno int not null,
+	RutAlumno int(8) not null,
 	DvAlumno varchar(1) not null,
 	Nombres varchar(25) not null,
 	ApellidoPaterno varchar(25) not null,
@@ -93,7 +93,7 @@ CREATE TABLE if not exists Alumno (
 CREATE TABLE if not exists TelefonoAlumno (
 	IdTelefono int not null auto_increment,
 	Telefono int not null,
-	RutAlumno int not null,
+	RutAlumno int(8) not null,
 	CONSTRAINT PK_TelefonoAlumno_Idtelefono
 	PRIMARY KEY (IdTelefono),
 	CONSTRAINT FK_TelefonoAlumno_RutAlumno
@@ -102,9 +102,9 @@ CREATE TABLE if not exists TelefonoAlumno (
 
 CREATE TABLE if not exists Prestamo (
 	Nro int not null auto_increment,
-	RutUsuario int not null,
+	RutUsuario int(8) not null,
 	DvUsuario varchar(1) not null,
-	RutAlumno int not null,
+	RutAlumno int(8) not null,
 	DvAlumno varchar(1) not null,
 	Emision date not null,
 	CONSTRAINT PK_Prestamo_Nro
@@ -113,7 +113,11 @@ CREATE TABLE if not exists Prestamo (
 	FOREIGN KEY (RutUsuario) references Usuario(RutUsuario),
 	CONSTRAINT FK_Prestamo_RutAlumno
 	FOREIGN KEY (RutAlumno) references Alumno(RutAlumno)
+	CONSTRAINT FK_Prestamo_Emision
+	FOREIGN KEY (Emision) references Alumno(RutAlumno)
 	);
+
+ALTER TABLE `prestamo` CHANGE `Emision` `Emision` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
 CREATE TABLE if not exists Autor (
 	CodAutor int not null auto_increment,
@@ -143,6 +147,10 @@ CREATE TABLE if not exists Libro (
 	CONSTRAINT FK_Autor_CodCategoria
 	FOREIGN KEY (CodCategoria) references Categoria(CodCategoria)
 	);
+
+ALTER TABLE Libro
+ADD CONSTRAINT UNQ_Libro_Isbn UNIQUE (Isbn),
+ADD CONSTRAINT CHK_Libro_NroPagina CHECK (NroPagina>0)
     
 CREATE TABLE if not exists libro_autor (
 	CodLibro int not null,
@@ -165,7 +173,7 @@ CREATE TABLE if not exists Ejemplar (
 	CodLibro int not null,
 	CodUbicacion int not null,
 	Estado int not null,
-	Activo int not null,
+	Activo boolean not null,
 	CONSTRAINT PK_ejemplar_CodEjemplar
 	PRIMARY KEY (CodEjemplar),
 	CONSTRAINT PK_Ejemplar_CodLibro
@@ -174,6 +182,9 @@ CREATE TABLE if not exists Ejemplar (
 	FOREIGN KEY(CodUbicacion) references Ubicacion(CodUbicacion)
 	);
 
+ALTER table Ejemplar
+ADD CONSTRAINT CHK_EJEMPLAR_ESTADO CHECK (estado>=0 and estado<=1);
+ADD CONSTRAINT CHK_EJEMPLAR_ACTIVO CHECK (Activo>=0 and Activo<=1);
 
 CREATE TABLE if not exists DetallePrestamo (
 	NroPrestamo int not null,
@@ -185,6 +196,6 @@ CREATE TABLE if not exists DetallePrestamo (
 	CONSTRAINT FK_DetallePrestamo_NroPrestamo
 	FOREIGN KEY (NroPrestamo) references Prestamo(Nro),
 	CONSTRAINT FK_DetallePrestamo_Codigo
-	FOREIGN KEY (Codigo) references Ejemplar(CodEjemplar)
+	FOREIGN KEY (Codigo) references Ejemplar(CodEjemplar),
 	);
 
