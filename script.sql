@@ -1,6 +1,4 @@
-/*SCRIPT PROYECTO*/
-
-CREATE DATABASE if not exists Biblioteca;
+/CREATE DATABASE if not exists Biblioteca;
 
 USE Biblioteca;
 
@@ -148,6 +146,15 @@ CREATE TABLE if not exists Libro (
 	CONSTRAINT FK_Autor_CodCategoria
 	FOREIGN KEY (CodCategoria) references Categoria(CodCategoria)
 	);
+    
+CREATE TABLE if not exists libro_autor (
+	CodLibro int not null,
+	CodAutor int not null,
+	CONSTRAINT FK_libro_autor_codlibro
+	FOREIGN KEY (CodLibro) REFERENCES Libro(CodLibro),
+	CONSTRAINT FK_libro_autor_CodAutor
+	FOREIGN KEY (CodAutor) REFERENCES autor(CodAutor)
+);
 
 CREATE TABLE if not exists Ubicacion (
     CodUbicacion int not null auto_increment,
